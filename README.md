@@ -48,7 +48,7 @@ A full-stack web application that combines a Task Management system with a News 
 
 1. **Clone the Repository**
    ```bash
-   git clone <your-repository-url>
+   git clone <(https://github.com/mandeeps1nghh/newsreader)>
    cd <project-directory>
    ```
 

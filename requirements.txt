@@ -1,0 +1,7 @@
+flask
+flask-cors
+newsapi-python
+newspaper3k
+lxml[html_clean]
+gunicorn
+python-dotenv 

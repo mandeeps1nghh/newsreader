@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
 
+// Add environment variable for API URL
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
 const App = () => {
   const [task, setTask] = useState('');
   const [date, setDate] = useState(new Date());
@@ -55,19 +58,28 @@ const App = () => {
 
     setIsLoading(true);
     setError(null);
+    setNews([]); // Clear previous results
 
     try {
+      console.log('Fetching news...'); // Debug log
       const response = await fetch(
-        `http://localhost:5000/api/news?q=${encodeURIComponent(newsQuery)}&dateFilter=${dateFilter}`
+        `${API_URL}/api/news?q=${encodeURIComponent(newsQuery)}&dateFilter=${dateFilter}`
       );
-      const data = await response.json();
-
+      
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch news');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      setNews(data.articles);
+      
+      const data = await response.json();
+      console.log('Received data:', data); // Debug log
+      
+      if (data.articles && Array.isArray(data.articles)) {
+        setNews(data.articles);
+      } else {
+        throw new Error('Invalid data format received');
+      }
     } catch (err) {
+      console.error('Search error:', err); // Debug log
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -159,9 +171,21 @@ const App = () => {
             </button>
           </div>
 
+          {isLoading && (
+            <div className="loading-message">
+              Searching for news... Please wait.
+            </div>
+          )}
+
           {error && (
             <div className="error-message">
-              {error}
+              Error: {error}
+            </div>
+          )}
+
+          {!isLoading && !error && news.length === 0 && (
+            <div className="no-results">
+              No news articles found. Try a different search term.
             </div>
           )}
 

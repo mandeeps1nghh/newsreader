@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)  # This allows our React frontend to make requests to our Flask backend
 
 # You'll need to sign up for a free API key at https://newsapi.org
-NEWS_API_KEY = ''
+NEWS_API_KEY = '85c09931ce8a4795a88a18b0eeec3d4a'
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 
 @app.route('/api/news', methods=['GET'])

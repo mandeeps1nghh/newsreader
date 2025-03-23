@@ -5,50 +5,11 @@ import './App.css';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 const App = () => {
-  const [task, setTask] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [tasks, setTasks] = useState([]);
-  const [editingId, setEditingId] = useState(null);
   const [newsQuery, setNewsQuery] = useState('');
   const [news, setNews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dateFilter, setDateFilter] = useState('anytime');
-
-  const addTask = () => {
-    if (task.trim()) {
-      if (editingId !== null) {
-        // Update existing task
-        setTasks(tasks.map(t => 
-          t.id === editingId 
-            ? { ...t, text: task, date: date }
-            : t
-        ));
-        setEditingId(null);
-      } else {
-        // Add new task
-        setTasks([...tasks, {
-          id: Date.now(),
-          text: task,
-          date: date
-        }]);
-      }
-      setTask('');
-    } else {
-      alert('Please enter a task.');
-    }
-  };
-
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter(t => t.id !== taskId));
-  };
-
-  const editTask = (taskId) => {
-    const taskToEdit = tasks.find(t => t.id === taskId);
-    setTask(taskToEdit.text);
-    setDate(taskToEdit.date);
-    setEditingId(taskId);
-  };
 
   const searchNews = async () => {
     if (!newsQuery.trim()) {
@@ -88,61 +49,12 @@ const App = () => {
 
   return (
     <div className="page-container">
-      <div className="section tasks-manager">
-        <div className="container">
-          <h1 className="header">Task Manager</h1>
-          <input
-            className="input"
-            type="text"
-            placeholder="Enter Task"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
-          <input
-            type="date"
-            className="input"
-            value={date.toISOString().split('T')[0]}
-            onChange={(e) => setDate(new Date(e.target.value))}
-          />
-          <div className="button-container">
-            <button onClick={addTask}>
-              {editingId !== null ? 'Update Task' : 'Add Task'}
-            </button>
-          </div>
-
-          <div className="tasks-section">
-            <h2>Tasks</h2>
-            {tasks.map(task => (
-              <div key={task.id} className="task-item">
-                <div className="task-content">
-                  <span>{task.text}</span>
-                  <span className="task-date">
-                    {task.date.toDateString()}
-                  </span>
-                </div>
-                <div className="task-actions">
-                  <button 
-                    className="action-button edit"
-                    onClick={() => editTask(task.id)}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    className="action-button delete"
-                    onClick={() => deleteTask(task.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       <div className="section news-finder">
         <div className="container">
-          <h1 className="header">Find News</h1>
+          <div className="header-section">
+            <h1 className="header">News Pulse</h1>
+            <p className="header-description">Stay informed with real-time news from around the world</p>
+          </div>
           <input
             className="input"
             type="text"
